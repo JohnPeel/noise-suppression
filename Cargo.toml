@@ -1,0 +1,11 @@
+[workspace]
+members = [
+    "noise-suppression-common",
+    "noise-suppression-ladspa",
+    "noise-suppression-lv2",
+    "noise-suppression-mono-vst2",
+    "noise-suppression-stereo-vst2"
+]
+
+[profile.release]
+lto = true

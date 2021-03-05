@@ -1,0 +1,12 @@
+[package]
+name = "noise-suppression-lv2"
+version = "0.1.0"
+authors = ["John Peel <john@dgby.org>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+noise-suppression-common = { path = "../noise-suppression-common" }
+lv2 = "0.6"

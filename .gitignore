@@ -1,0 +1,3 @@
+/target
+Cargo.lock
+/*-lv2/resources/*.lv2/*_lv2.*

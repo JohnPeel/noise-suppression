@@ -35,7 +35,7 @@ impl Default for NoiseSuppressionMono {
         transfer.set_parameter(0, 0.5);
 
         NoiseSuppressionMono {
-            denoise: NoiseSuppression::new(),
+            denoise: NoiseSuppression::default(),
             parameters: Arc::new(Parameters {
                 transfer
             })
@@ -55,7 +55,7 @@ impl Plugin for NoiseSuppressionMono {
             midi_inputs: 0,
             midi_outputs: 0,
             unique_id: 0x00000190,
-            version: 0001,
+            version: 0x01,
             category: Category::SurroundFx,
             initial_delay: 1,
             preset_chunks: false,

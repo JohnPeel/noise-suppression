@@ -49,7 +49,7 @@ impl Plugin for NoiseSuppressionMono {
     fn new(_plugin_info: &PluginInfo, features: &mut Features<'static>) -> Option<Self> {
         Some(NoiseSuppressionMono {
             urids: features.map.populate_collection()?,
-            denoise: NoiseSuppression::new()
+            denoise: NoiseSuppression::default()
         })
     }
 
@@ -74,8 +74,8 @@ impl Plugin for NoiseSuppressionStereo {
     fn new(_plugin_info: &PluginInfo, features: &mut Features<'static>) -> Option<Self> {
         Some(NoiseSuppressionStereo {
             urids: features.map.populate_collection()?,
-            left: NoiseSuppression::new(),
-            right: NoiseSuppression::new()
+            left: NoiseSuppression::default(),
+            right: NoiseSuppression::default()
         })
     }
 

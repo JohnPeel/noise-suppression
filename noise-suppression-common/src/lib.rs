@@ -14,8 +14,8 @@ pub struct NoiseSuppression {
     remaining_grace_periods: usize
 }
 
-impl NoiseSuppression {
-    pub fn new() -> Self {
+impl Default for NoiseSuppression {
+    fn default() -> Self {
         NoiseSuppression {
             first: true,
             state: DenoiseState::new(),
@@ -26,7 +26,9 @@ impl NoiseSuppression {
             remaining_grace_periods: 0
         }
     }
+}
 
+impl NoiseSuppression {
     pub fn set_grace_periods(&mut self, grace_periods: usize) {
         self.initial_grace_periods = grace_periods;
         self.remaining_grace_periods = usize::min(self.remaining_grace_periods, self.initial_grace_periods);
@@ -37,7 +39,7 @@ impl NoiseSuppression {
     }
 
     pub fn process(&mut self, output: &mut [f32], input: &[f32], sample_count: usize) {
-        self.input_buffer.extend(input.into_iter()
+        self.input_buffer.extend(input.iter()
             .map(|f| i16::from_sample(*f) as f32));
 
         let samples_to_process = self.input_buffer.len() / FRAME_SIZE;

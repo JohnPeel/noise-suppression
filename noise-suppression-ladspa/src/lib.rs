@@ -6,9 +6,9 @@ struct NoiseSuppressionMono {
 }
 
 impl NoiseSuppressionMono {
-    fn new(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
+    fn create(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
         Box::new(NoiseSuppressionMono {
-            denoise: NoiseSuppression::new()
+            denoise: NoiseSuppression::default()
         })
     }
 }
@@ -30,10 +30,10 @@ struct NoiseSuppressionStereo {
 }
 
 impl NoiseSuppressionStereo {
-    fn new(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
+    fn create(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
         Box::new(NoiseSuppressionStereo {
-            left: NoiseSuppression::new(),
-            right: NoiseSuppression::new()
+            left: NoiseSuppression::default(),
+            right: NoiseSuppression::default()
         })
     }
 }
@@ -84,7 +84,7 @@ pub fn get_ladspa_descriptor(index: u64) -> Option<PluginDescriptor> {
                     ..Default::default()
                 }
             ],
-            new: NoiseSuppressionMono::new,
+            new: NoiseSuppressionMono::create,
         }),
         1 => Some(PluginDescriptor {
             unique_id: 0x00000191,
@@ -123,7 +123,7 @@ pub fn get_ladspa_descriptor(index: u64) -> Option<PluginDescriptor> {
                     ..Default::default()
                 }
             ],
-            new: NoiseSuppressionStereo::new,
+            new: NoiseSuppressionStereo::create,
         }),
         _ => None
     }

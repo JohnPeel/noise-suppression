@@ -122,7 +122,7 @@ jobs:
           mv "target/${{ matrix.target }}/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
       - name: "Moving Resources Directory to Distribution"
         run: |
-          mv -r noise-suppression-lv2/resources/* dist/
+          mv noise-suppression-lv2/resources/* dist/
           mv dist/noise_suppression_lv2.${{ matrix.ext }} dist/noise_suppression.lv2/
         if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2

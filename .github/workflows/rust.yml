@@ -27,14 +27,17 @@ jobs:
             cargo_args: --all
             ext: so
             libprefix: lib
+            strip_args: --strip-all
           - os: windows-latest
             cargo_args: --all --exclude noise-suppression-lv2 --exclude noise-suppression-ladspa
             ext: dll
-            libprefix: 
+            libprefix:
+            strip_args: --strip-all
           - os: macos-latest
             cargo_args: --all --exclude noise-suppression-lv2 --exclude noise-suppression-ladspa
             ext: dylib
             libprefix: lib
+            strip_args:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -43,6 +46,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
+            !target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
           key: ${{ runner.os }}-${{ matrix.rust }}-cargo
       - uses: actions-rs/toolchain@v1
         with:
@@ -62,10 +66,9 @@ jobs:
         with:
           command: build
           args: ${{ matrix.cargo_args }} --release
-      - run: strip --strip-all target/release/*.${{ matrix.ext }}
+      - name: Strip Binaries
+        run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-artifacts
           path: target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
-
-

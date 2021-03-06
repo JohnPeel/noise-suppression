@@ -22,6 +22,9 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
+        arch:
+          - x86_64
+          - i686
         package:
           - lv2
           - ladspa
@@ -30,6 +33,8 @@ jobs:
         exclude:
           - os: macos-latest
             package: lv2
+          - os: macos-latest
+            arch: i686
         include:
           - os: ubuntu-latest
             os_name: linux
@@ -69,13 +74,13 @@ jobs:
             ~/.cargo/git
             target
             !target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
-          key: ${{ runner.os }}-${{ matrix.rust }}-cargo
+          key: ${{ runner.os }}-${{ matrix.rust }}-${{ matrix-arch }}
       - name: Remove old Binaries
         run: rm target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}
+          toolchain: ${{ matrix.rust }}-${{ matrix-arch }}
           override: true
           components: clippy
       - uses: actions-rs/cargo@v1
@@ -104,5 +109,5 @@ jobs:
         if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os_name }}-${{ matrix.package }}
+          name: ${{ matrix.os_name }}-${{ matrix-arch }}-${{ matrix.package }}
           path: dist/*

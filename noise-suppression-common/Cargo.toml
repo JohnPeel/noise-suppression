@@ -7,4 +7,3 @@ edition = "2018"
 [dependencies]
 nnnoiseless = "0.3"
 dasp = "0.11"
-iterpipes = "0.2"

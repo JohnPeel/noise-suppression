@@ -79,9 +79,16 @@ jobs:
       - name: Strip Binaries
         run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}
+      - name: Create Distribution
+        run: |
+          mkdir dist/
+          cp "target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}" dist/
+      - name: ""
+        run: |
+          cp noise-suppression-lv2/resources/* dist/
+          mv dist/*.so dist/noise_suppression.lv2/noise_suppression_lv2.so
+        if: matrix.project == 'lv2'
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-${{ matrix.project }}
-          path: |
-            target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
-            noise-suppression-${{ matrix.project }}/resources/**/*
+          path: dist/*

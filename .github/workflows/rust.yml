@@ -93,7 +93,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: windows-artifacts
-          path: target/release/libnoise_suppression_*.dll
+          path: target/release/noise_suppression_*.dll
   ci-macos:
     runs-on: macos-latest
     strategy:

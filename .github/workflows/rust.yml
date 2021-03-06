@@ -80,7 +80,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}-${{ matrix-arch }}
+          toolchain: ${{ matrix.rust }}-${{ matrix.arch }}
           override: true
           components: clippy
       - uses: actions-rs/cargo@v1

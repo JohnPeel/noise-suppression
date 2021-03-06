@@ -82,11 +82,13 @@ jobs:
       - name: Create Distribution
         run: |
           mkdir dist/
-          cp "target/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.project}}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.project}}.${{ matrix.ext }}
-      - name: ""
+          cp "target/release/${{ matrix.libprefix }}noise_suppression_${project//-/_}.${{ matrix.ext }}" dist/noise_suppression_${project//-/_}.${{ matrix.ext }}
+        env:
+          project: ${{ matrix.project }}
+      - name: "Moving Resources Directory to Distribution"
         run: |
-          cp noise-suppression-lv2/resources/* dist/
-          mv dist/noise_suppression_${{ matrix.project}}.${{ matrix.ext }} dist/noise_suppression.lv2/
+          cp -r noise-suppression-lv2/resources/* dist/
+          mv dist/noise_suppression_lv2.${{ matrix.ext }} dist/noise_suppression.lv2/
         if: matrix.project == 'lv2'
       - uses: actions/upload-artifact@v2
         with:

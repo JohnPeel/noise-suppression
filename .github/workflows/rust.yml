@@ -64,7 +64,7 @@ jobs:
           args: ${{ matrix.cargo_args }} --release
       - uses: actions/upload-artifact@v2
         with:
-          name: linux-artifacts
+          name: ${{ runner.os }}-artifacts
           path: target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
 
 

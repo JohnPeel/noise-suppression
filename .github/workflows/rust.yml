@@ -75,8 +75,6 @@ jobs:
             target
             !target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
           key: ${{ runner.os }}-${{ matrix.rust }}-${{ matrix.arch }}
-      - name: Remove old Binaries
-        run: rm -f target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
@@ -101,10 +99,10 @@ jobs:
       - name: Create Distribution
         run: |
           mkdir dist/
-          cp "target/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
+          mv "target/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
       - name: "Moving Resources Directory to Distribution"
         run: |
-          cp -r noise-suppression-lv2/resources/* dist/
+          mv -r noise-suppression-lv2/resources/* dist/
           mv dist/noise_suppression_lv2.${{ matrix.ext }} dist/noise_suppression.lv2/
         if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2

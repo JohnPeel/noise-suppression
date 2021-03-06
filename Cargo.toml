@@ -8,4 +8,8 @@ members = [
 ]
 
 [profile.release]
-lto = true
+lto = "fat"
+debug = false
+debug-assertions = false
+codegen-units = 1
+panic = "abort"

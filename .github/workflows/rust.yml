@@ -22,15 +22,23 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
-        project:
+        package:
           - lv2
           - ladspa
           - mono-vst2
           - stereo-vst2
         exclude:
           - os: macos-latest
-            project: lv2
+            package: lv2
         include:
+          - package: lv2
+            name: lv2
+          - package: ladspa
+            name: ladspa
+          - package: mono-vst2
+            name: mono_vst2
+          - package: stereo-vst2
+            name: stereo_vst2
           - os: ubuntu-latest
             ext: so
             libprefix: lib
@@ -67,30 +75,28 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --package noise-suppression-${{ matrix.project }} -- -D warnings
+          args: --package noise-suppression-${{ matrix.package }} -- -D warnings
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --package noise-suppression-${{ matrix.project }}
+          args: --package noise-suppression-${{ matrix.package }}
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --package noise-suppression-${{ matrix.project }} --release
+          args: --package noise-suppression-${{ matrix.package }} --release
       - name: Strip Binaries
         run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}
       - name: Create Distribution
         run: |
           mkdir dist/
-          cp "target/release/${{ matrix.libprefix }}noise_suppression_${project//-/_}.${{ matrix.ext }}" dist/noise_suppression_${project//-/_}.${{ matrix.ext }}
-        env:
-          project: ${{ matrix.project }}
+          cp "target/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
       - name: "Moving Resources Directory to Distribution"
         run: |
           cp -r noise-suppression-lv2/resources/* dist/
           mv dist/noise_suppression_lv2.${{ matrix.ext }} dist/noise_suppression.lv2/
-        if: matrix.project == 'lv2'
+        if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-${{ matrix.project }}
+          name: ${{ runner.os }}-${{ matrix.package }}
           path: dist/*

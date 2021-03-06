@@ -42,6 +42,21 @@ jobs:
             os_name: windows
           - os: macos-latest
             os_name: macos
+          - os: ubuntu-latest
+            arch: x86_64
+            target: x86_64-unknown-linux-gnu
+          - os: windows-latest
+            arch: x86_64
+            target: x86_64-pc-windows-msvc
+          - os: macos-latest
+            arch: x86_64
+            target: x86_64-apple-darwin
+          - os: ubuntu-latest
+            arch: i686
+            target: i686-unknown-linux-gnu
+          - os: windows-latest
+            arch: i686
+            target: i686-pc-windows-msvc
           - package: lv2
             name: lv2
           - package: ladspa
@@ -78,21 +93,22 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}-${{ matrix.arch }}
+          toolchain: ${{ matrix.rust }}
+          target: ${{ matrix.target }}
           override: true
           components: clippy
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --package noise-suppression-${{ matrix.package }} -- -D warnings
+          args: --package noise-suppression-${{ matrix.package }} --target ${{ matrix.target }} -- -D warnings
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --package noise-suppression-${{ matrix.package }}
+          args: --package noise-suppression-${{ matrix.package }} --target ${{ matrix.target }}
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --package noise-suppression-${{ matrix.package }} --release
+          args: --package noise-suppression-${{ matrix.package }} --target ${{ matrix.target }} --release
       - name: Strip Binaries
         run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}

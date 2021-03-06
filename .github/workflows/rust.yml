@@ -22,21 +22,26 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macos-latest
+        project:
+          - lv2
+          - ladspa
+          - mono-vst2
+          - stereo-vst2
+        exclude:
+          - os: macos-latest
+            project: lv2
         include:
           - os: ubuntu-latest
-            cargo_args: --all
             ext: so
             libprefix: lib
             strip: true
             strip_args: --strip-all
           - os: windows-latest
-            cargo_args: --all --exclude noise-suppression-lv2 --exclude noise-suppression-ladspa
             ext: dll
             libprefix:
             strip: true
             strip_args: --strip-all
           - os: macos-latest
-            cargo_args: --all --exclude noise-suppression-lv2 --exclude noise-suppression-ladspa
             ext: dylib
             libprefix: lib
             strip: false
@@ -60,19 +65,19 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: ${{ matrix.cargo_args }} -- -D warnings
+          args: --project noise-suppression-${{ matrix.project }} -- -D warnings
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: ${{ matrix.cargo_args }}
+          args: --project noise-suppression-${{ matrix.project }}
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: ${{ matrix.cargo_args }} --release
+          args: --project noise-suppression-${{ matrix.project }} --release
       - name: Strip Binaries
         run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-artifacts
+          name: ${{ runner.os }}-${{ matrix.project }}
           path: target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}

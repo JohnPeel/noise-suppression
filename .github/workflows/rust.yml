@@ -74,7 +74,7 @@ jobs:
             ~/.cargo/git
             target
             !target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
-          key: ${{ runner.os }}-${{ matrix.rust }}-${{ matrix-arch }}
+          key: ${{ runner.os }}-${{ matrix.rust }}-${{ matrix.arch }}
       - name: Remove old Binaries
         run: rm target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
       - uses: actions-rs/toolchain@v1
@@ -109,5 +109,5 @@ jobs:
         if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.os_name }}-${{ matrix-arch }}-${{ matrix.package }}
+          name: ${{ matrix.os_name }}-${{ matrix.arch }}-${{ matrix.package }}
           path: dist/*

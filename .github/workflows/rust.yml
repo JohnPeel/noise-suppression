@@ -105,7 +105,6 @@ jobs:
         with:
           command: clippy
           args: --package noise-suppression-${{ matrix.package }} --target ${{ matrix.target }} -- -D warnings
-          if: matrix.arch != 'i686'
       - uses: actions-rs/cargo@v1
         with:
           command: test

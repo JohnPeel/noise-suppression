@@ -65,15 +65,15 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --project noise-suppression-${{ matrix.project }} -- -D warnings
+          args: --package noise-suppression-${{ matrix.project }} -- -D warnings
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --project noise-suppression-${{ matrix.project }}
+          args: --package noise-suppression-${{ matrix.project }}
       - uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --project noise-suppression-${{ matrix.project }} --release
+          args: --package noise-suppression-${{ matrix.project }} --release
       - name: Strip Binaries
         run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}

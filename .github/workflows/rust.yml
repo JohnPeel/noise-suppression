@@ -82,4 +82,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-${{ matrix.project }}
-          path: target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
+          path: |
+            target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
+            noise-suppression-${{ matrix.project }}/resources/**/*

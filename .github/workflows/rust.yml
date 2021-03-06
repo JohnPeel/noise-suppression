@@ -12,6 +12,7 @@ env:
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     strategy:
       matrix:
         rust:
@@ -114,12 +115,12 @@ jobs:
           command: build
           args: --package noise-suppression-${{ matrix.package }} --target ${{ matrix.target }} --release
       - name: Strip Binaries
-        run: strip ${{ matrix.strip_args }} target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
+        run: strip ${{ matrix.strip_args }} target/${{ matrix.target }}/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
         if: ${{ matrix.strip }}
       - name: Create Distribution
         run: |
           mkdir dist/
-          mv "target/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
+          mv "target/${{ matrix.target }}/release/${{ matrix.libprefix }}noise_suppression_${{ matrix.name }}.${{ matrix.ext }}" dist/noise_suppression_${{ matrix.name }}.${{ matrix.ext }}
       - name: "Moving Resources Directory to Distribution"
         run: |
           mv -r noise-suppression-lv2/resources/* dist/

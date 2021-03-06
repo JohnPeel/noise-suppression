@@ -56,6 +56,8 @@ jobs:
             target
             !target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
           key: ${{ runner.os }}-${{ matrix.rust }}-cargo
+      - name: Remove old Binaries
+        run: rm target/release/${{ matrix.libprefix }}noise_suppression_*.${{ matrix.ext }}
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal

@@ -31,6 +31,12 @@ jobs:
           - os: macos-latest
             package: lv2
         include:
+          - os: ubuntu-latest
+            os_name: linux
+          - os: windows-latest
+            os_name: windows
+          - os: macos-latest
+            os_name: macos
           - package: lv2
             name: lv2
           - package: ladspa
@@ -98,5 +104,5 @@ jobs:
         if: matrix.package == 'lv2'
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ runner.os }}-${{ matrix.package }}
+          name: ${{ matrix.os_name }}-${{ matrix.package }}
           path: dist/*

@@ -9,4 +9,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 noise-suppression-common = { path = "../noise-suppression-common" }
-lv2 = "0.6"
+lv2 = { version = "0.6", default-features = false, features = [ "minimal_plugin" ] }

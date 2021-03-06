@@ -1,5 +1,5 @@
 
-use dasp::Sample;
+use dasp_sample::Sample;
 use nnnoiseless::DenoiseState;
 
 pub const FRAME_SIZE: usize = DenoiseState::FRAME_SIZE;

@@ -1,10 +1,17 @@
 use std::sync::Arc;
 
-use vst::{buffer::AudioBuffer, channels::{ChannelInfo, SpeakerArrangementType}, plugin::{Category, Info, Plugin, PluginParameters}, plugin_main, util::ParameterTransfer};
 use noise_suppression_common::NoiseSuppression;
+#[allow(deprecated)]
+use vst::{
+    buffer::AudioBuffer,
+    channels::{ChannelInfo, SpeakerArrangementType},
+    plugin::{Category, HostCallback, Info, Plugin, PluginParameters},
+    plugin_main,
+    util::ParameterTransfer,
+};
 
 struct Parameters {
-    transfer: ParameterTransfer
+    transfer: ParameterTransfer,
 }
 
 impl PluginParameters for Parameters {
@@ -19,14 +26,14 @@ impl PluginParameters for Parameters {
     fn get_parameter_name(&self, index: i32) -> String {
         match index {
             0 => "VAD Threshold (%)".to_string(),
-            _ => format!("Param {}", index)
+            _ => format!("Param {}", index),
         }
     }
 }
 
 struct NoiseSuppressionMono {
     denoise: NoiseSuppression,
-    parameters: Arc<Parameters>
+    parameters: Arc<Parameters>,
 }
 
 impl Default for NoiseSuppressionMono {
@@ -34,16 +41,22 @@ impl Default for NoiseSuppressionMono {
         let transfer = ParameterTransfer::new(1);
         transfer.set_parameter(0, 0.5);
 
-        NoiseSuppressionMono {
+        Self {
             denoise: NoiseSuppression::default(),
-            parameters: Arc::new(Parameters {
-                transfer
-            })
+            parameters: Arc::new(Parameters { transfer }),
         }
     }
 }
 
+#[allow(deprecated)]
 impl Plugin for NoiseSuppressionMono {
+    fn new(_: HostCallback) -> Self
+    where
+        Self: Sized,
+    {
+        Self::default()
+    }
+
     fn get_info(&self) -> Info {
         Info {
             name: "Noise Suppression (Mono)".to_string(),
@@ -60,7 +73,7 @@ impl Plugin for NoiseSuppressionMono {
             initial_delay: 1,
             preset_chunks: false,
             f64_precision: false,
-            silent_when_stopped: true
+            silent_when_stopped: true,
         }
     }
 
@@ -71,34 +84,34 @@ impl Plugin for NoiseSuppressionMono {
     fn get_input_info(&self, input: i32) -> ChannelInfo {
         match input {
             0 => ChannelInfo::new(
-                    "Input".to_string(),
-                    Some("input".to_string()),
-                    true,
-                    Some(SpeakerArrangementType::Mono)
-                ),
+                "Input".to_string(),
+                Some("input".to_string()),
+                true,
+                Some(SpeakerArrangementType::Mono),
+            ),
             _ => ChannelInfo::new(
                 format!("Input channel {}", input),
                 Some(format!("In {}", input)),
                 true,
                 None,
-            )
+            ),
         }
     }
 
     fn get_output_info(&self, output: i32) -> ChannelInfo {
         match output {
             0 => ChannelInfo::new(
-                    "Output".to_string(),
-                    Some("output".to_string()),
-                    true,
-                    Some(SpeakerArrangementType::Mono)
-                ),
+                "Output".to_string(),
+                Some("output".to_string()),
+                true,
+                Some(SpeakerArrangementType::Mono),
+            ),
             _ => ChannelInfo::new(
                 format!("Output channel {}", output),
                 Some(format!("Out {}", output)),
                 true,
                 None,
-            )
+            ),
         }
     }
 
@@ -107,8 +120,8 @@ impl Plugin for NoiseSuppressionMono {
         let vad_threshold = self.parameters.get_parameter(0);
         self.denoise.set_vad_threshold(vad_threshold);
 
-        for (input, mut output) in buffer.zip() {
-            self.denoise.process(&mut output, input, sample_count);
+        for (input, output) in buffer.zip() {
+            self.denoise.process(output, input, sample_count);
         }
     }
 }

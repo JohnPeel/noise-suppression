@@ -6,6 +6,11 @@ members = [
     "noise-suppression-mono-vst2",
     "noise-suppression-stereo-vst2"
 ]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
 
 [profile.release]
 lto = "fat"

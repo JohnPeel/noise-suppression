@@ -1,8 +1,7 @@
 [package]
 name = "noise-suppression-ladspa"
-version = "0.1.0"
-authors = ["John Peel <john@dgby.org>"]
-edition = "2018"
+version.workspace = true
+edition.workspace = true
 
 [lib]
 crate-type = ["cdylib"]

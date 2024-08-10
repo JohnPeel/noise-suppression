@@ -1,9 +1,8 @@
 [package]
 name = "noise-suppression-common"
-version = "0.1.0"
-authors = ["John Peel <john@dgby.org>"]
-edition = "2018"
+version.workspace = true
+edition.workspace = true
 
 [dependencies]
-nnnoiseless = { version = "0.3", default-features = false, features = [] }
+nnnoiseless = { version = "0.5", default-features = false, features = ["dasp"] }
 dasp_sample = "0.11"

@@ -1,12 +1,11 @@
 [package]
 name = "noise-suppression-mono-vst2"
-version = "0.1.0"
-authors = ["John Peel <john@dgby.org>"]
-edition = "2018"
+version.workspace = true
+edition.workspace = true
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
 noise-suppression-common = { path = "../noise-suppression-common" }
-vst = "0.2"
+vst = "0.4"

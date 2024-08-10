@@ -1,14 +1,17 @@
-use ladspa::{DefaultValue, PROP_HARD_REALTIME_CAPABLE, PROP_INPLACE_BROKEN, Plugin, PluginDescriptor, Port, PortConnection, PortDescriptor};
+use ladspa::{
+    DefaultValue, Plugin, PluginDescriptor, Port, PortConnection, PortDescriptor,
+    PROP_HARD_REALTIME_CAPABLE, PROP_INPLACE_BROKEN,
+};
 use noise_suppression_common::NoiseSuppression;
 
 struct NoiseSuppressionMono {
-    denoise: NoiseSuppression
+    denoise: NoiseSuppression,
 }
 
 impl NoiseSuppressionMono {
     fn create(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
-        Box::new(NoiseSuppressionMono {
-            denoise: NoiseSuppression::default()
+        Box::new(Self {
+            denoise: NoiseSuppression::default(),
         })
     }
 }
@@ -26,14 +29,14 @@ impl Plugin for NoiseSuppressionMono {
 
 struct NoiseSuppressionStereo {
     left: NoiseSuppression,
-    right: NoiseSuppression
+    right: NoiseSuppression,
 }
 
 impl NoiseSuppressionStereo {
     fn create(_: &PluginDescriptor, _: u64) -> Box<dyn Plugin + Send> {
-        Box::new(NoiseSuppressionStereo {
+        Box::new(Self {
             left: NoiseSuppression::default(),
-            right: NoiseSuppression::default()
+            right: NoiseSuppression::default(),
         })
     }
 }
@@ -49,8 +52,10 @@ impl Plugin for NoiseSuppressionStereo {
         self.left.set_vad_threshold(*vad_threshold);
         self.right.set_vad_threshold(*vad_threshold);
 
-        self.left.process(&mut output_left, input_left, sample_count);
-        self.right.process(&mut output_right, input_right, sample_count);
+        self.left
+            .process(&mut output_left, input_left, sample_count);
+        self.right
+            .process(&mut output_right, input_right, sample_count);
     }
 }
 
@@ -82,7 +87,7 @@ pub fn get_ladspa_descriptor(index: u64) -> Option<PluginDescriptor> {
                     name: "output",
                     desc: PortDescriptor::AudioOutput,
                     ..Default::default()
-                }
+                },
             ],
             new: NoiseSuppressionMono::create,
         }),
@@ -121,10 +126,10 @@ pub fn get_ladspa_descriptor(index: u64) -> Option<PluginDescriptor> {
                     name: "output_right",
                     desc: PortDescriptor::AudioOutput,
                     ..Default::default()
-                }
+                },
             ],
             new: NoiseSuppressionStereo::create,
         }),
-        _ => None
+        _ => None,
     }
 }

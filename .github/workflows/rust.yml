@@ -1,7 +1,8 @@
 name: Rust
 
 on:
-  release: {}
+  release:
+    types: [published]
   push:
     branches: [ main ]
   pull_request:

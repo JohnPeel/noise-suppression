@@ -74,14 +74,14 @@ jobs:
             strip_args: --strip-all
           - os: windows-latest
             ext: dll
-            libprefix:
+            libprefix: ""
             strip: true
             strip_args: --strip-all
           - os: macos-latest
             ext: dylib
             libprefix: lib
             strip: false
-            strip_args:
+            strip_args: ""
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -126,7 +126,7 @@ jobs:
           mv noise-suppression-lv2/resources/* dist/
           mv dist/noise_suppression_lv2.${{ matrix.ext }} dist/noise_suppression.lv2/
         if: matrix.package == 'lv2'
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os_name }}-${{ matrix.arch }}-${{ matrix.package }}
           path: dist/*
